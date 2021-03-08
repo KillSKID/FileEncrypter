@@ -1,0 +1,67 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: kotlin_version
+    }
+}
+
+group 'sexy'
+version '1.0'
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+compileJava {
+    sourceCompatibility = targetCompatibility = 1.8
+    options.encoding = 'UTF-8'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = 1.8
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url = "http://oss.sonatype.org/content/groups/public/"
+    }
+    maven {
+        name = "jitpack.io"
+        url = "https://jitpack.io"
+    }
+}
+
+configurations {
+    library
+}
+
+dependencies {
+    library("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version") {
+        exclude module: 'kotlin-stdlib-common'
+        exclude module: 'annotations'
+    }
+
+    library 'io.github.microutils:kotlin-logging:1.12.0'
+    library 'org.slf4j:slf4j-simple:1.7.29'
+
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+
+    implementation configurations.library
+}
+
+
+
+jar {
+    manifest.attributes(
+            'Manifest-Version': 1.0,
+            'Main-Class': 'sexy.killred.encrypt.MainKt'
+    )
+
+    from {
+        configurations.library.collect {it.isDirectory() ? it : zipTree(it) }
+    }
+}
