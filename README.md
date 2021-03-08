@@ -1,2 +1,2 @@
 # FileEncrypter
- A simple encrypter to encrypt all file on your desktop
+ A simple encrypter for encrypt all file on your desktop
