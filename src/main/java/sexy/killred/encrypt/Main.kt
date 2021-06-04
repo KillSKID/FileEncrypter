@@ -170,7 +170,10 @@ fun getUUID(): String {
 fun genUniqueKey(): Int {
     val serial: String = getUUID()
     val uuid = serial.hashCode().absoluteValue + (1..Int.MAX_VALUE - serial.hashCode().absoluteValue).random()
-    dir.mkdirs()
+    if (!dataFile.exists()) {
+        dataFile.parentFile.mkdirs()
+        dataFile.createNewFile()
+    }
     val writer = BufferedWriter(FileWriter(dataFile))
     writer.write(AES.encrypt(uuid.toString(), getUUID().sha1().sha256().sha1().sha512().md5()))
     writer.close()
